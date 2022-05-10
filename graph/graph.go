@@ -12,10 +12,10 @@ type Graph struct {
 	Mark  []bool   //访问标识
 }
 
-// Line 连接信息, My It 必选项
+// Line 连接信息
 type Line struct {
-	My string
-	It string
+	Star string
+	End  string
 }
 
 // InitPoint 初始化点信息
@@ -38,9 +38,9 @@ func (g *Graph) InitConnect(lines ...Line) {
 func (g *Graph) BuildGraph() {
 	for i := 0; i < len(g.line); i++ { //外层循环读取连接信息
 		for j := 0; j < len(g.Point); j++ { //找到第一个点
-			if g.Point[j] == g.line[i].My {
+			if g.Point[j] == g.line[i].Star {
 				for k := 0; k < len(g.Point); k++ { //找到第二个点
-					if g.Point[k] == g.line[i].It {
+					if g.Point[k] == g.line[i].End {
 						//找到点所在的坐标
 						s := j
 						e := k
@@ -58,17 +58,22 @@ func (g *Graph) BuildGraph() {
 }
 
 // DeepFirstSearch 深度优先查询算法
-func (g *Graph) DeepFirstSearch(edge [][]int, star int) {
+func (g *Graph) DeepFirstSearch(star int) {
+	g.deepFirstSearch(g.Edge, star)
+	// 刷新访问标识符
+	g.Mark = make([]bool, len(g.Point))
+}
+
+func (g *Graph) deepFirstSearch(edge [][]int, star int) {
 	pl := len(g.Point)
 	for i := star; i < pl; i++ {
 		for j := 0; j < pl; j++ {
-
 			if !g.Mark[i] {
 				g.Mark[i] = true
 				fmt.Println(g.Point[i])
 			}
 			if edge[i][j] != 0 && !g.Mark[j] {
-				g.DeepFirstSearch(edge, j)
+				g.deepFirstSearch(edge, j)
 			}
 		}
 		return
