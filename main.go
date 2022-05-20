@@ -3,8 +3,57 @@ package main
 import "fmt"
 
 func main() {
-	nums := []int{1, 2, -1, -2, 2, 1, -2, 1, 4, -5, 4}
-	fmt.Println(maxSubArray(nums))
+	//nums := []int{1, 2, -1, -2, 2, 1, -2, 1, 4, -5, 4}
+	fmt.Println(isBalanced(&TreeNode{
+		Val: 1,
+		Left: &TreeNode{
+			Val: 2,
+		},
+		Right: &TreeNode{
+			Val: 2,
+			Left: &TreeNode{
+				Val: 3,
+			},
+			Right: &TreeNode{
+				Val: 4,
+				Left: &TreeNode{
+					Val: 4,
+				},
+			},
+		},
+	}))
+}
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func isBalanced(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	return abs(deep(root.Left)-deep(root.Right)) <= 1 && isBalanced(root.Left) && isBalanced(root.Right)
+}
+
+func deep(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	l := deep(root.Left)
+	r := deep(root.Right)
+	if l > r {
+		return l + 1
+	} else {
+		return r + 1
+	}
+}
+func abs(a int) int {
+	if a < 0 {
+		return -1 * a
+	}
+	return a
 }
 
 func maxSubArray(nums []int) int {
